@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "incumbency-portal",
+  "compatibility_date": "2026-07-11",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": "@tanstack/react-start/server-entry",
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "incumbency-db",
+      "database_id": "fa1654a8-7a5c-4cf6-b48d-48038e4591c9",
+      "migrations_dir": "drizzle/migrations"
+    }
+  ]
+}
