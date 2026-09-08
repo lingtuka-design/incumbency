@@ -382,20 +382,20 @@ function DashboardPage() {
 
           {/* Department Quick Filter Input */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
               placeholder="Filter department..."
               value={deptSearch}
               onChange={(e) => setDeptSearch(e.target.value)}
-              className="w-full bg-background text-foreground text-xs pl-8 pr-3 py-1.5 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+              className="w-full bg-background text-foreground text-sm pl-8 pr-3 py-1.5 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
             />
             {deptSearch && (
               <button
                 onClick={() => setDeptSearch("")}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
-                <X className="w-3 h-3" />
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
@@ -406,7 +406,7 @@ function DashboardPage() {
           {/* "All Departments" item */}
           <button
             onClick={() => handleSelectDept("ALL")}
-            className={`w-full text-left px-3 py-2 rounded-md text-xs font-medium flex items-center justify-between transition-colors ${
+            className={`w-full text-left px-3 py-2.5 rounded-md text-sm font-medium flex items-center justify-between transition-colors ${
               currentDept === "ALL"
                 ? "bg-primary text-primary-foreground shadow-xs"
                 : "text-sidebar-foreground hover:bg-sidebar-accent"
@@ -416,7 +416,7 @@ function DashboardPage() {
               <span className="font-semibold">ALL DEPARTMENTS</span>
             </span>
             <span
-              className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
+              className={`text-xs px-2 py-0.5 rounded-full font-mono font-semibold ${
                 currentDept === "ALL"
                   ? "bg-primary-foreground/20 text-primary-foreground"
                   : "bg-muted text-muted-foreground"
@@ -433,7 +433,7 @@ function DashboardPage() {
               <button
                 key={dept.code}
                 onClick={() => handleSelectDept(dept.code)}
-                className={`w-full text-left px-3 py-2 rounded-md text-xs flex items-center justify-between transition-colors ${
+                className={`w-full text-left px-3 py-2 rounded-md flex items-center justify-between transition-colors ${
                   isSelected
                     ? "bg-primary text-primary-foreground font-medium shadow-xs"
                     : "text-sidebar-foreground hover:bg-sidebar-accent"
@@ -441,12 +441,12 @@ function DashboardPage() {
               >
                 <div className="truncate pr-2">
                   <div className="flex items-center gap-1.5">
-                    <span className="font-mono font-bold tracking-tight">
+                    <span className="font-mono font-bold text-sm tracking-tight">
                       {dept.code}
                     </span>
                   </div>
                   <p
-                    className={`text-[11px] truncate mt-0.5 ${
+                    className={`text-xs truncate mt-0.5 ${
                       isSelected ? "text-primary-foreground/80" : "text-muted-foreground"
                     }`}
                   >
@@ -457,7 +457,7 @@ function DashboardPage() {
                 <div className="flex items-center gap-1 shrink-0">
                   {dept.totalCount > 0 ? (
                     <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold ${
+                      className={`text-xs px-2 py-0.5 rounded font-mono font-semibold ${
                         isSelected
                           ? "bg-primary-foreground/20 text-primary-foreground"
                           : "bg-muted text-foreground"
@@ -466,10 +466,10 @@ function DashboardPage() {
                       {dept.totalCount}
                     </span>
                   ) : (
-                    <span className="text-[10px] text-muted-foreground/60">0</span>
+                    <span className="text-xs text-muted-foreground/60">0</span>
                   )}
                   <ChevronRight
-                    className={`w-3 h-3 ${
+                    className={`w-3.5 h-3.5 ${
                       isSelected ? "text-primary-foreground" : "text-muted-foreground/40"
                     }`}
                   />
@@ -495,14 +495,14 @@ function DashboardPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-mono text-xs px-2 py-0.5 rounded font-bold bg-primary/10 text-primary border border-primary/20">
+                <span className="font-mono text-xs sm:text-sm px-2.5 py-0.5 rounded font-bold bg-primary/10 text-primary border border-primary/20">
                   {currentDept}
                 </span>
-                <h2 className="text-xl font-bold tracking-tight text-foreground">
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
                   {activeDeptInfo ? activeDeptInfo.name : "All Departments Incumbency"}
                 </h2>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                 Showing {incumbencies.length} records • Manage employee advance and loan incumbencies
               </p>
             </div>
@@ -512,16 +512,16 @@ function DashboardPage() {
               <button
                 onClick={handleExportExcel}
                 disabled={incumbencies.length === 0}
-                className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-md border border-input bg-background hover:bg-muted text-foreground transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-3 py-2 rounded-md border border-input bg-background hover:bg-muted text-foreground transition-colors disabled:opacity-50"
               >
-                <Download className="w-3.5 h-3.5" />
+                <Download className="w-4 h-4" />
                 Export Excel
               </button>
               <button
                 onClick={openCreateModal}
-                className="inline-flex items-center gap-1.5 text-xs font-medium px-3.5 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-3.5 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-4 h-4" />
                 Add Incumbency
               </button>
             </div>
@@ -530,28 +530,28 @@ function DashboardPage() {
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
             <div className="p-3 rounded-lg border border-border bg-background">
-              <div className="text-[11px] font-medium text-muted-foreground">Total Records</div>
-              <div className="text-xl font-bold text-foreground mt-0.5">
+              <div className="text-xs font-medium text-muted-foreground">Total Records</div>
+              <div className="text-2xl font-bold text-foreground mt-0.5">
                 {activeDeptInfo ? activeDeptInfo.totalCount : stats.totalIncumbencies}
               </div>
             </div>
             <div className="p-3 rounded-lg border border-border bg-background">
-              <div className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+              <div className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
                 Active Records
               </div>
-              <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+              <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
                 {activeDeptInfo ? activeDeptInfo.activeCount : stats.activeIncumbencies}
               </div>
             </div>
             <div className="p-3 rounded-lg border border-border bg-background">
-              <div className="text-[11px] font-medium text-muted-foreground">Closed Records</div>
-              <div className="text-xl font-bold text-muted-foreground mt-0.5">
+              <div className="text-xs font-medium text-muted-foreground">Closed Records</div>
+              <div className="text-2xl font-bold text-muted-foreground mt-0.5">
                 {activeDeptInfo ? activeDeptInfo.closedCount : stats.closedIncumbencies}
               </div>
             </div>
             <div className="p-3 rounded-lg border border-border bg-background">
-              <div className="text-[11px] font-medium text-muted-foreground">Filtered Results</div>
-              <div className="text-xl font-bold text-primary mt-0.5">
+              <div className="text-xs font-medium text-muted-foreground">Filtered Results</div>
+              <div className="text-2xl font-bold text-primary mt-0.5">
                 {incumbencies.length}
               </div>
             </div>
@@ -559,12 +559,12 @@ function DashboardPage() {
 
           {/* Advance Type Filter Tabs */}
           <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-border">
-            <span className="text-xs font-semibold text-muted-foreground mr-1 flex items-center gap-1">
-              <Filter className="w-3 h-3" /> Type:
+            <span className="text-xs sm:text-sm font-semibold text-muted-foreground mr-1 flex items-center gap-1">
+              <Filter className="w-3.5 h-3.5" /> Type:
             </span>
             <button
               onClick={() => handleSelectType("ALL")}
-              className={`text-xs px-2.5 py-1 rounded-md font-medium transition-colors ${
+              className={`text-xs sm:text-sm px-3 py-1.5 rounded-md font-medium transition-colors ${
                 currentType === "ALL"
                   ? "bg-foreground text-background font-semibold"
                   : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -578,14 +578,14 @@ function DashboardPage() {
                 <button
                   key={type.code}
                   onClick={() => handleSelectType(type.code)}
-                  className={`text-xs px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 transition-colors ${
+                  className={`text-xs sm:text-sm px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5 transition-colors ${
                     isSel
                       ? "bg-foreground text-background font-semibold shadow-xs"
                       : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >
                   <span>{type.code}</span>
-                  <span className="text-[10px] opacity-75">({type.name})</span>
+                  <span className="text-xs opacity-75">({type.name})</span>
                 </button>
               )
             })}
@@ -604,7 +604,7 @@ function DashboardPage() {
               placeholder="Search by name, code no, designation..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-background text-foreground text-xs pl-9 pr-8 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+              className="w-full bg-background text-foreground text-sm pl-9 pr-8 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
             />
             {searchQuery && (
               <button
@@ -630,10 +630,10 @@ function DashboardPage() {
           </form>
 
           {/* Status Filter Toggle */}
-          <div className="flex items-center gap-1 bg-muted p-1 rounded-lg self-start sm:self-auto text-xs">
+          <div className="flex items-center gap-1 bg-muted p-1 rounded-lg self-start sm:self-auto text-xs sm:text-sm">
             <button
               onClick={() => handleSelectStatus("ALL")}
-              className={`px-2.5 py-1 rounded-md font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
                 currentStatus === "ALL"
                   ? "bg-background text-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
@@ -643,7 +643,7 @@ function DashboardPage() {
             </button>
             <button
               onClick={() => handleSelectStatus("ACTIVE")}
-              className={`px-2.5 py-1 rounded-md font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
                 currentStatus === "ACTIVE"
                   ? "bg-emerald-600 text-white shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
@@ -653,7 +653,7 @@ function DashboardPage() {
             </button>
             <button
               onClick={() => handleSelectStatus("CLOSED")}
-              className={`px-2.5 py-1 rounded-md font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
                 currentStatus === "CLOSED"
                   ? "bg-slate-700 text-white shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
@@ -670,18 +670,18 @@ function DashboardPage() {
         <div className="flex-1 p-4 lg:p-6 overflow-x-auto">
           {incumbencies.length > 0 ? (
             <div className="rounded-lg border border-border bg-card shadow-xs overflow-hidden">
-              <table className="w-full text-left text-xs border-collapse">
+              <table className="w-full text-left text-sm border-collapse">
                 <thead>
-                  <tr className="bg-muted/50 border-b border-border text-muted-foreground font-semibold">
+                  <tr className="bg-muted/50 border-b border-border text-muted-foreground font-semibold text-xs uppercase tracking-wider">
                     <th className="py-3 px-3.5 w-32 whitespace-nowrap">Loan Code</th>
                     <th className="py-3 px-3.5">Employee Name</th>
                     <th className="py-3 px-3.5">Designation</th>
                     <th className="py-3 px-3.5">Father's Name</th>
-                    <th className="py-3 px-2.5 w-44">Superannuation (Pension)</th>
+                    <th className="py-3 px-2.5 w-48">Superannuation (Pension)</th>
                     <th className="py-3 px-2.5 w-36">RG Number</th>
                     <th className="py-3 px-3.5 w-24">Dept</th>
                     <th className="py-3 px-3.5 w-24">Type</th>
-                    <th className="py-3 px-3.5 w-20 text-center">Status</th>
+                    <th className="py-3 px-3.5 w-24 text-center">Status</th>
                     <th className="py-3 px-3.5 w-24 text-right">Actions</th>
                   </tr>
                 </thead>
@@ -728,7 +728,7 @@ function DashboardPage() {
             {/* Modal Header */}
             <div className="p-4 border-b border-border flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-sm">
+                <h3 className="font-semibold text-base text-foreground">
                   {editingItem ? "Edit Incumbency Record" : "Add New Incumbency"}
                 </h3>
                 <p className="text-xs text-muted-foreground mt-0.5">
@@ -737,7 +737,7 @@ function DashboardPage() {
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
+                className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -746,7 +746,7 @@ function DashboardPage() {
             {/* Modal Form */}
             <form onSubmit={handleFormSubmit} className="p-4 space-y-4">
               {formError && (
-                <div className="p-2.5 rounded-md bg-destructive/10 text-destructive text-xs">
+                <div className="p-3 rounded-md bg-destructive/10 text-destructive text-sm">
                   {formError}
                 </div>
               )}
@@ -761,7 +761,7 @@ function DashboardPage() {
                     value={formData.departmentCode}
                     onChange={(e) => setFormData({ ...formData, departmentCode: e.target.value })}
                     required
-                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="w-full bg-background text-foreground text-sm px-3 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
                   >
                     {departments.map((d) => (
                       <option key={d.code} value={d.code}>
@@ -780,7 +780,7 @@ function DashboardPage() {
                     value={formData.advanceType}
                     onChange={(e) => setFormData({ ...formData, advanceType: e.target.value })}
                     required
-                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="w-full bg-background text-foreground text-sm px-3 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
                   >
                     {advanceTypes.map((t) => (
                       <option key={t.code} value={t.code}>
@@ -803,9 +803,9 @@ function DashboardPage() {
                     placeholder="e.g. 001 or HBA/DAT/001"
                     value={formData.code}
                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="w-full bg-background text-foreground text-sm px-3 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
                   />
-                  <span className="block text-[10px] text-muted-foreground mt-0.5 truncate">
+                  <span className="block text-xs text-muted-foreground mt-0.5 truncate">
                     Preview: {formData.code?.includes("/") ? formData.code : `${formData.advanceType}/${formData.departmentCode || "..."}/${formData.code || "001"}`}
                   </span>
                 </div>
@@ -821,7 +821,7 @@ function DashboardPage() {
                     placeholder="e.g. C. Lalniliana"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="w-full bg-background text-foreground text-sm px-3 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                 </div>
               </div>
@@ -837,7 +837,7 @@ function DashboardPage() {
                     placeholder="e.g. JD, SDAO, Inspector"
                     value={formData.designation}
                     onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="w-full bg-background text-foreground text-sm px-3 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                 </div>
 
@@ -851,7 +851,7 @@ function DashboardPage() {
                     placeholder="e.g. Lalhmingliana"
                     value={formData.fatherName}
                     onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
-                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="w-full bg-background text-foreground text-sm px-3 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                 </div>
               </div>
@@ -875,13 +875,13 @@ function DashboardPage() {
                         const normalized = normalizeSuperannuationOnBlur(formData.superannuation)
                         setFormData({ ...formData, superannuation: normalized })
                       }}
-                      className="w-full bg-background text-foreground text-xs p-2 pr-8 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring font-mono"
+                      className="w-full bg-background text-foreground text-sm px-3 py-2 pr-9 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring font-mono"
                     />
                     <label
                       className="absolute right-2 cursor-pointer text-muted-foreground hover:text-foreground p-0.5"
                       title="Choose Date"
                     >
-                      <Calendar className="w-3.5 h-3.5" />
+                      <Calendar className="w-4 h-4" />
                       <input
                         type="date"
                         className="sr-only"
@@ -907,7 +907,7 @@ function DashboardPage() {
                     placeholder="e.g. RG-001"
                     value={formData.rgNumber}
                     onChange={(e) => setFormData({ ...formData, rgNumber: e.target.value })}
-                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="w-full bg-background text-foreground text-sm px-3 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                 </div>
               </div>
@@ -917,8 +917,8 @@ function DashboardPage() {
                 <label className="block text-xs font-medium text-muted-foreground mb-1">
                   Status *
                 </label>
-                <div className="flex items-center gap-4 text-xs">
-                  <label className="flex items-center gap-1.5 cursor-pointer">
+                <div className="flex items-center gap-4 text-sm">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="status"
@@ -930,7 +930,7 @@ function DashboardPage() {
                       Active
                     </span>
                   </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="status"
@@ -948,16 +948,16 @@ function DashboardPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-3 py-1.5 rounded-md text-xs font-medium border border-input bg-background hover:bg-muted text-foreground transition-colors"
+                  className="px-3.5 py-2 rounded-md text-sm font-medium border border-input bg-background hover:bg-muted text-foreground transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs disabled:opacity-50"
                 >
-                  {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   {editingItem ? "Save Changes" : "Create Record"}
                 </button>
               </div>
@@ -1043,22 +1043,22 @@ function InlineIncumbencyRow({
   return (
     <tr className="hover:bg-muted/30 transition-colors group">
       <td className="py-2.5 px-3.5 whitespace-nowrap">
-        <span className="font-mono font-bold text-xs text-primary px-1.5 py-0.5 rounded bg-primary/5 border border-primary/15">
+        <span className="font-mono font-bold text-xs sm:text-sm text-primary px-2 py-0.5 rounded bg-primary/5 border border-primary/15">
           {item.code}
         </span>
       </td>
-      <td className="py-2.5 px-3.5 font-medium text-foreground whitespace-nowrap">
+      <td className="py-2.5 px-3.5 font-medium text-foreground whitespace-nowrap text-sm">
         {item.name}
       </td>
-      <td className="py-2.5 px-3.5 text-muted-foreground whitespace-nowrap">
+      <td className="py-2.5 px-3.5 text-muted-foreground whitespace-nowrap text-sm">
         {item.designation || "—"}
       </td>
-      <td className="py-2.5 px-3.5 text-muted-foreground whitespace-nowrap">
+      <td className="py-2.5 px-3.5 text-muted-foreground whitespace-nowrap text-sm">
         {item.fatherName || "—"}
       </td>
 
       {/* Superannuation (Pension Date: DD-MM-YYYY) */}
-      <td className="py-1.5 px-2.5 w-44">
+      <td className="py-1.5 px-2.5 w-48">
         <div className="relative flex items-center">
           <input
             type="text"
@@ -1078,14 +1078,14 @@ function InlineIncumbencyRow({
                 e.currentTarget.blur()
               }
             }}
-            className="w-full font-mono text-xs px-2 py-1 pr-6 rounded border border-input bg-background/80 hover:bg-background focus:bg-background focus:outline-none focus:ring-1 focus:ring-ring transition-colors placeholder:text-muted-foreground/40"
+            className="w-full font-mono text-sm px-2.5 py-1.5 pr-7 rounded border border-input bg-background/80 hover:bg-background focus:bg-background focus:outline-none focus:ring-1 focus:ring-ring transition-colors placeholder:text-muted-foreground/40"
             title="Superannuation Pension Date (DD-MM-YYYY)"
           />
           <label
-            className="absolute right-1 cursor-pointer text-muted-foreground hover:text-foreground p-0.5"
+            className="absolute right-1.5 cursor-pointer text-muted-foreground hover:text-foreground p-0.5"
             title="Choose Date"
           >
-            <Calendar className="w-3.5 h-3.5" />
+            <Calendar className="w-4 h-4" />
             <input
               type="date"
               className="sr-only"
@@ -1109,20 +1109,20 @@ function InlineIncumbencyRow({
                 e.currentTarget.blur()
               }
             }}
-            className="w-full font-mono text-xs px-2 py-1 rounded border border-input bg-background/80 hover:bg-background focus:bg-background focus:outline-none focus:ring-1 focus:ring-ring transition-colors placeholder:text-muted-foreground/40"
+            className="w-full font-mono text-sm px-2.5 py-1.5 rounded border border-input bg-background/80 hover:bg-background focus:bg-background focus:outline-none focus:ring-1 focus:ring-ring transition-colors placeholder:text-muted-foreground/40"
             title="RG Number code"
           />
         </div>
       </td>
 
       <td className="py-2.5 px-3.5">
-        <span className="font-mono text-[11px] font-semibold text-muted-foreground">
+        <span className="font-mono text-xs font-semibold text-muted-foreground">
           {item.departmentCode}
         </span>
       </td>
       <td className="py-2.5 px-3.5">
         <span
-          className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${getAdvanceBadgeColor(
+          className={`inline-block px-2.5 py-0.5 rounded text-xs font-bold border ${getAdvanceBadgeColor(
             item.advanceType
           )}`}
         >
@@ -1131,51 +1131,51 @@ function InlineIncumbencyRow({
       </td>
       <td className="py-2.5 px-3.5 text-center">
         <span
-          className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+          className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
             item.status === "ACTIVE"
               ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
               : "bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300"
           }`}
         >
           {item.status === "ACTIVE" ? (
-            <CheckCircle2 className="w-3 h-3" />
+            <CheckCircle2 className="w-3.5 h-3.5" />
           ) : (
-            <XCircle className="w-3 h-3" />
+            <XCircle className="w-3.5 h-3.5" />
           )}
           {item.status}
         </span>
       </td>
       <td className="py-2.5 px-3.5 text-right whitespace-nowrap">
-        <div className="inline-flex items-center gap-1">
+        <div className="inline-flex items-center gap-1.5">
           {saveStatus === "saving" && (
             <span title="Saving to D1..." className="inline-flex items-center text-blue-500 mr-1">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
             </span>
           )}
           {saveStatus === "saved" && (
             <span title="Saved to D1" className="inline-flex items-center text-emerald-600 dark:text-emerald-400 mr-1">
-              <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+              <Check className="w-4 h-4 stroke-[2.5]" />
             </span>
           )}
           {saveStatus === "error" && (
             <span title="Save error! Try again" className="inline-flex items-center text-destructive mr-1">
-              <AlertCircle className="w-3.5 h-3.5" />
+              <AlertCircle className="w-4 h-4" />
             </span>
           )}
 
           <button
             onClick={() => openEditModal(item)}
-            className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             title="Edit Full Record"
           >
-            <Edit2 className="w-3.5 h-3.5" />
+            <Edit2 className="w-4 h-4" />
           </button>
           <button
             onClick={() => handleDelete(item)}
-            className="p-1 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+            className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
             title="Delete"
           >
-            <Trash2 className="w-3.5 h-3.5" />
+            <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </td>
