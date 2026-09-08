@@ -327,7 +327,6 @@ function DashboardPage() {
       "Father Name": row.fatherName || "",
       Superannuation: row.superannuation || "",
       "RG Number": row.rgNumber || "",
-      Remarks: row.remarks || "",
       Status: row.status,
     }))
 
@@ -682,7 +681,6 @@ function DashboardPage() {
                     <th className="py-3 px-2.5 w-36">RG Number</th>
                     <th className="py-3 px-3.5 w-24">Dept</th>
                     <th className="py-3 px-3.5 w-24">Type</th>
-                    <th className="py-3 px-3.5">Remarks</th>
                     <th className="py-3 px-3.5 w-20 text-center">Status</th>
                     <th className="py-3 px-3.5 w-24 text-right">Actions</th>
                   </tr>
@@ -945,20 +943,6 @@ function DashboardPage() {
                 </div>
               </div>
 
-              {/* Remarks */}
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1">
-                  Remarks / Notes
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="Additional notes, order no, or closure status..."
-                  value={formData.remarks}
-                  onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-                  className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring resize-none"
-                />
-              </div>
-
               {/* Modal Actions */}
               <div className="pt-2 border-t border-border flex items-center justify-end gap-2">
                 <button
@@ -1144,9 +1128,6 @@ function InlineIncumbencyRow({
         >
           {item.advanceType}
         </span>
-      </td>
-      <td className="py-2.5 px-3.5 text-muted-foreground max-w-xs truncate">
-        {item.remarks || "—"}
       </td>
       <td className="py-2.5 px-3.5 text-center">
         <span
