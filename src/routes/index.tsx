@@ -125,6 +125,32 @@ function DashboardPage() {
   const currentType = searchParams.type || "ALL"
   const currentStatus = searchParams.status || "ALL"
 
+  // Keep searchQuery input in sync if URL search param changes externally
+  useEffect(() => {
+    setSearchQuery(searchParams.q || "")
+  }, [searchParams.q])
+
+  // Debounced real-time search: auto-load results as user types without pressing Enter
+  useEffect(() => {
+    const currentQ = (searchParams.q || "").trim()
+    const newQ = searchQuery.trim()
+    if (newQ === currentQ) return
+
+    const timer = setTimeout(() => {
+      navigate({
+        to: "/",
+        search: {
+          dept: currentDept,
+          type: currentType,
+          q: newQ || undefined,
+          status: currentStatus,
+        },
+      })
+    }, 250)
+
+    return () => clearTimeout(timer)
+  }, [searchQuery, currentDept, currentType, currentStatus, searchParams.q, navigate])
+
   // Reset pagination whenever department, type, or search changes
   useEffect(() => {
     setCurrentPage(1)
