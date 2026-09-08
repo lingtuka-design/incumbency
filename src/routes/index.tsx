@@ -31,6 +31,7 @@ import {
   type DepartmentWithStats,
   type SummaryStats,
 } from "../lib/server-actions"
+import { formatSuperannuationInput, normalizeSuperannuationOnBlur } from "../lib/utils"
 
 export interface SearchParams {
   dept?: string
@@ -863,13 +864,39 @@ function DashboardPage() {
                   <label className="block text-xs font-medium text-muted-foreground mb-1">
                     Superannuation (Pension Date: DD-MM-YYYY)
                   </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. 31-03-2028"
-                    value={formData.superannuation}
-                    onChange={(e) => setFormData({ ...formData, superannuation: e.target.value })}
-                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
-                  />
+                  <div className="relative flex items-center">
+                    <input
+                      type="text"
+                      placeholder="DD-MM-YYYY"
+                      value={formData.superannuation}
+                      onChange={(e) => {
+                        const formatted = formatSuperannuationInput(e.target.value, formData.superannuation)
+                        setFormData({ ...formData, superannuation: formatted })
+                      }}
+                      onBlur={() => {
+                        const normalized = normalizeSuperannuationOnBlur(formData.superannuation)
+                        setFormData({ ...formData, superannuation: normalized })
+                      }}
+                      className="w-full bg-background text-foreground text-xs p-2 pr-8 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring font-mono"
+                    />
+                    <label
+                      className="absolute right-2 cursor-pointer text-muted-foreground hover:text-foreground p-0.5"
+                      title="Choose Date"
+                    >
+                      <Calendar className="w-3.5 h-3.5" />
+                      <input
+                        type="date"
+                        className="sr-only"
+                        onChange={(e) => {
+                          const val = e.target.value
+                          if (val) {
+                            const [y, m, d] = val.split("-")
+                            setFormData({ ...formData, superannuation: `${d}-${m}-${y}` })
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
                 </div>
 
                 {/* RG Number */}
@@ -1053,8 +1080,15 @@ function InlineIncumbencyRow({
             type="text"
             placeholder="DD-MM-YYYY"
             value={superannuation}
-            onChange={(e) => setSuperannuation(e.target.value)}
-            onBlur={() => handleSaveField("superannuation", superannuation)}
+            onChange={(e) => {
+              const formatted = formatSuperannuationInput(e.target.value, superannuation)
+              setSuperannuation(formatted)
+            }}
+            onBlur={() => {
+              const normalized = normalizeSuperannuationOnBlur(superannuation)
+              setSuperannuation(normalized)
+              handleSaveField("superannuation", normalized)
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.currentTarget.blur()
