@@ -20,10 +20,7 @@ import {
 } from "lucide-react"
 import * as XLSX from "xlsx"
 import {
-  getDepartments,
-  getAdvanceTypes,
-  getIncumbencies,
-  getSummaryStats,
+  getDashboardData,
   createIncumbency,
   updateIncumbency,
   deleteIncumbency,
@@ -79,26 +76,14 @@ export const Route = createFileRoute("/")({
     status: search.status,
   }),
   loader: async ({ deps }): Promise<LoaderData> => {
-    const [departments, advanceTypes, incumbencies, stats] = await Promise.all([
-      getDepartments(),
-      getAdvanceTypes(),
-      getIncumbencies({
-        data: {
-          departmentCode: deps.dept,
-          advanceType: deps.type,
-          search: deps.q,
-          status: deps.status,
-        },
-      }),
-      getSummaryStats(),
-    ])
-
-    return {
-      departments,
-      advanceTypes,
-      incumbencies,
-      stats,
-    }
+    return await getDashboardData({
+      data: {
+        departmentCode: deps.dept,
+        advanceType: deps.type,
+        search: deps.q,
+        status: deps.status,
+      },
+    })
   },
   component: DashboardPage,
 })
@@ -111,7 +96,14 @@ function DashboardPage() {
 
   const [searchQuery, setSearchQuery] = useState(searchParams.q || "")
   const [deptSearch, setDeptSearch] = useState("")
+  const [navDept, setNavDept] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+
+  useEffect(() => {
+    if (!isPending) {
+      setNavDept(null)
+    }
+  }, [isPending])
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -139,9 +131,10 @@ function DashboardPage() {
 
   // Selected Department Info
   const activeDeptInfo = useMemo(() => {
-    if (currentDept === "ALL") return null
-    return departments.find((d) => d.code === currentDept) || null
-  }, [departments, currentDept])
+    const activeCode = navDept || currentDept
+    if (activeCode === "ALL") return null
+    return departments.find((d) => d.code === activeCode) || null
+  }, [departments, currentDept, navDept])
 
   // Filter departments for sidebar search
   const filteredDepartments = useMemo(() => {
@@ -152,8 +145,9 @@ function DashboardPage() {
     )
   }, [departments, deptSearch])
 
-  // Quick department switch
+  // Quick department switch with instant visual feedback
   const handleSelectDept = (code: string) => {
+    setNavDept(code)
     startTransition(() => {
       navigate({
         to: "/",
@@ -407,7 +401,7 @@ function DashboardPage() {
           <button
             onClick={() => handleSelectDept("ALL")}
             className={`w-full text-left px-3 py-2.5 rounded-md text-sm font-medium flex items-center justify-between transition-colors ${
-              currentDept === "ALL"
+              (navDept ? navDept === "ALL" : currentDept === "ALL")
                 ? "bg-primary text-primary-foreground shadow-xs"
                 : "text-sidebar-foreground hover:bg-sidebar-accent"
             }`}
@@ -415,20 +409,34 @@ function DashboardPage() {
             <span className="flex items-center gap-2 truncate">
               <span className="font-semibold">ALL DEPARTMENTS</span>
             </span>
-            <span
-              className={`text-xs px-2 py-0.5 rounded-full font-mono font-semibold ${
-                currentDept === "ALL"
-                  ? "bg-primary-foreground/20 text-primary-foreground"
-                  : "bg-muted text-muted-foreground"
-              }`}
-            >
-              {stats.totalIncumbencies}
-            </span>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span
+                className={`text-xs px-2 py-0.5 rounded-full font-mono font-semibold ${
+                  (navDept ? navDept === "ALL" : currentDept === "ALL")
+                    ? "bg-primary-foreground/20 text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {stats.totalIncumbencies}
+              </span>
+              {isPending && navDept === "ALL" ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-primary-foreground" />
+              ) : (
+                <ChevronRight
+                  className={`w-3.5 h-3.5 ${
+                    (navDept ? navDept === "ALL" : currentDept === "ALL")
+                      ? "text-primary-foreground"
+                      : "text-muted-foreground/40"
+                  }`}
+                />
+              )}
+            </div>
           </button>
 
           {/* Department Items */}
           {filteredDepartments.map((dept) => {
-            const isSelected = currentDept === dept.code
+            const isSelected = navDept ? navDept === dept.code : currentDept === dept.code
+            const isNavigatingThis = isPending && navDept === dept.code
             return (
               <button
                 key={dept.code}
@@ -468,11 +476,15 @@ function DashboardPage() {
                   ) : (
                     <span className="text-xs text-muted-foreground/60">0</span>
                   )}
-                  <ChevronRight
-                    className={`w-3.5 h-3.5 ${
-                      isSelected ? "text-primary-foreground" : "text-muted-foreground/40"
-                    }`}
-                  />
+                  {isNavigatingThis ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <ChevronRight
+                      className={`w-3.5 h-3.5 ${
+                        isSelected ? "text-primary-foreground" : "text-muted-foreground/40"
+                      }`}
+                    />
+                  )}
                 </div>
               </button>
             )
@@ -489,7 +501,13 @@ function DashboardPage() {
       {/* ──────────────────────────────────────────────────────────
           MAIN CONTENT AREA
       ────────────────────────────────────────────────────────── */}
-      <section className="flex-1 flex flex-col overflow-y-auto md:h-[calc(100vh-3.5rem)]">
+      <section className="flex-1 flex flex-col overflow-y-auto md:h-[calc(100vh-3.5rem)] relative">
+        {/* Subtle loading indicator line during navigation */}
+        {isPending && (
+          <div className="absolute top-0 left-0 right-0 z-30 h-1 bg-primary/20 overflow-hidden">
+            <div className="h-full bg-primary animate-pulse w-full" />
+          </div>
+        )}
         {/* Department Banner & Overview */}
         <div className="p-4 lg:p-6 border-b border-border bg-card space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -667,7 +685,7 @@ function DashboardPage() {
         {/* ──────────────────────────────────────────────────────────
             DATA TABLE
         ────────────────────────────────────────────────────────── */}
-        <div className="flex-1 p-4 lg:p-6 overflow-x-auto">
+        <div className={`flex-1 p-4 lg:p-6 overflow-x-auto transition-opacity duration-150 ${isPending ? "opacity-60" : "opacity-100"}`}>
           {incumbencies.length > 0 ? (
             <div className="rounded-lg border border-border bg-card shadow-xs overflow-hidden">
               <table className="w-full text-left text-sm border-collapse">
