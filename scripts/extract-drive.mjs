@@ -15,7 +15,7 @@ export const DEPARTMENTS = [
   { code: 'ELCN', name: 'Election Department', folderId: '1cg8QxMd6HBCF394nZJF2YG6zBjgdKZIM' },
   { code: 'EXCISE', name: 'Excise & Narcotics Department', folderId: '1WRh9QeaLCODxLkMXcYh5-Fl8WNSRiYM_' },
   { code: 'FISH', name: 'Fisheries Department', folderId: '1zHbR1NnWDXje3lb6xvgq2TQWDhkGkp5H' },
-  { code: 'FOREST', name: 'Environment, Forests & Climate Change', folderId: '1KvXPi44Z7Dobd9qZCbCeJ2SMh5nUtb6t' },
+  { code: 'FOR', name: 'Environment, Forests & Climate Change', folderId: '1KvXPi44Z7Dobd9qZCbCeJ2SMh5nUtb6t' },
   { code: 'GHC', name: 'Gauhati High Court (Aizawl Bench)', folderId: '1Pmz5fZaK4Fs8Rf54ZPycYobvMdQnDHYc' },
   { code: 'HOR', name: 'Horticulture Department', folderId: '1nZ6GCfRWQAg5dTFfxnQaWbmDOGJ4lgsD' },
   { code: 'HTE', name: 'Higher & Technical Education Department', folderId: '1sjlZ9cqTda0kGCtFSY2Xuv85Q8QgJCR5' },

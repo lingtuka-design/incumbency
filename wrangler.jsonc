@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "incumbency",
+  "account_id": "65eb6cd86c7dea818f3faac6b1951988",
   "compatibility_date": "2026-07-11",
   "compatibility_flags": [
     "nodejs_compat"
