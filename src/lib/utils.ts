@@ -13,34 +13,38 @@ export function formatSuperannuationInput(val: string, prevVal = ""): string {
     return val.slice(0, -1)
   }
 
-  // If user explicitly typed a separator like 31- or 31/ or 31.
-  if (val.includes("-") || val.includes("/") || val.includes(".")) {
-    const parts = val.split(/[-/.]/)
-    if (parts.length > 1) {
-      const p0 = parts[0].replace(/\D/g, "").slice(0, 2)
-      const p1 = parts[1].replace(/\D/g, "").slice(0, 2)
-      const p2 = parts.slice(2).join("").replace(/\D/g, "").slice(0, 4)
+  // If there are explicit separators like hyphens, slashes, or dots
+  const parts = val.split(/[-/.]/)
+  if (parts.length > 1) {
+    let d = parts[0].replace(/\D/g, "").slice(0, 2)
+    let m = (parts[1] || "").replace(/\D/g, "")
+    let y = parts.slice(2).join("").replace(/\D/g, "").slice(0, 4)
 
-      let res = p0
-      if (parts.length > 1 && (p1 || val.endsWith("-") || val.endsWith("/") || val.endsWith("."))) {
-        res += "-" + p1
-      }
-      if (parts.length > 2 && (p2 || (parts[1] && (val.endsWith("-") || val.endsWith("/"))))) {
-        res += "-" + p2
-      }
-      return res
+    // Overflow extra digits from month into year if month exceeds 2 digits (e.g. typing year right after month)
+    if (m.length > 2) {
+      y = (m.slice(2) + y).slice(0, 4)
+      m = m.slice(0, 2)
     }
+
+    let res = d
+    if (parts.length > 1 || val.endsWith("-") || val.endsWith("/")) {
+      res += "-" + m
+    }
+    if (y || (parts.length > 2 && (val.endsWith("-") || val.endsWith("/")))) {
+      res += "-" + y
+    }
+    return res
   }
 
   // Pure digits auto-formatting: DD -> DD-MM -> DD-MM-YYYY
-  const cleaned = val.replace(/\D/g, "").slice(0, 8)
-  if (cleaned.length <= 2) {
-    return cleaned
+  const digits = val.replace(/\D/g, "").slice(0, 8)
+  if (digits.length <= 2) {
+    return digits
   }
-  if (cleaned.length <= 4) {
-    return `${cleaned.slice(0, 2)}-${cleaned.slice(2)}`
+  if (digits.length <= 4) {
+    return `${digits.slice(0, 2)}-${digits.slice(2)}`
   }
-  return `${cleaned.slice(0, 2)}-${cleaned.slice(2, 4)}-${cleaned.slice(4)}`
+  return `${digits.slice(0, 2)}-${digits.slice(2, 4)}-${digits.slice(4)}`
 }
 
 export function normalizeSuperannuationOnBlur(val: string): string {
