@@ -224,6 +224,17 @@ export interface CreateIncumbencyInput {
   status?: "ACTIVE" | "CLOSED"
 }
 
+// Helper to ensure standard Loan Code format: ADVANCE_TYPE/DEPARTMENT_CODE/NUMBER (e.g. HBA/DAT/001)
+export function formatLoanCode(advanceType: string, departmentCode: string, codeInput: string): string {
+  const clean = codeInput.trim().toUpperCase()
+  if (clean.includes("/")) {
+    return clean
+  }
+  const num = parseInt(clean, 10)
+  const padded = isNaN(num) ? clean : String(num).padStart(3, "0")
+  return `${advanceType.trim().toUpperCase()}/${departmentCode.trim().toUpperCase()}/${padded}`
+}
+
 // 5. Create new Incumbency
 export const createIncumbency = createServerFn({ method: "POST" })
   .validator((input: CreateIncumbencyInput) => {
@@ -237,11 +248,13 @@ export const createIncumbency = createServerFn({ method: "POST" })
     const id = crypto.randomUUID()
     const now = new Date()
 
+    const standardCode = formatLoanCode(data.advanceType, data.departmentCode, data.code)
+
     const newRecord = {
       id,
       departmentCode: data.departmentCode.trim(),
       advanceType: data.advanceType.trim().toUpperCase(),
-      code: data.code.trim(),
+      code: standardCode,
       name: data.name.trim(),
       designation: data.designation?.trim() || null,
       fatherName: data.fatherName?.trim() || null,
@@ -271,12 +284,14 @@ export const updateIncumbency = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     const now = new Date()
+    const standardCode = formatLoanCode(data.advanceType, data.departmentCode, data.code)
+
     await db
       .update(incumbencies)
       .set({
         departmentCode: data.departmentCode.trim(),
         advanceType: data.advanceType.trim().toUpperCase(),
-        code: data.code.trim(),
+        code: standardCode,
         name: data.name.trim(),
         designation: data.designation?.trim() || null,
         fatherName: data.fatherName?.trim() || null,

@@ -320,7 +320,7 @@ function DashboardPage() {
     const exportData = incumbencies.map((row) => ({
       "Dept Code": row.departmentCode,
       "Advance Type": row.advanceType,
-      "Code No": row.code,
+      "Loan Code": row.code,
       "Employee Name": row.name,
       Designation: row.designation || "",
       "Father Name": row.fatherName || "",
@@ -673,7 +673,7 @@ function DashboardPage() {
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="bg-muted/50 border-b border-border text-muted-foreground font-semibold">
-                    <th className="py-3 px-3.5 w-16">Code</th>
+                    <th className="py-3 px-3.5 w-32 whitespace-nowrap">Loan Code</th>
                     <th className="py-3 px-3.5">Employee Name</th>
                     <th className="py-3 px-3.5">Designation</th>
                     <th className="py-3 px-3.5">Father's Name</th>
@@ -796,16 +796,19 @@ function DashboardPage() {
                 {/* Code */}
                 <div>
                   <label className="block text-xs font-medium text-muted-foreground mb-1">
-                    Code No *
+                    Loan Code / Code No *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. 001"
+                    placeholder="e.g. 001 or HBA/DAT/001"
                     value={formData.code}
                     onChange={(e) => setFormData({ ...formData, code: e.target.value })}
                     className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
                   />
+                  <span className="block text-[10px] text-muted-foreground mt-0.5 truncate">
+                    Preview: {formData.code?.includes("/") ? formData.code : `${formData.advanceType}/${formData.departmentCode || "..."}/${formData.code || "001"}`}
+                  </span>
                 </div>
 
                 {/* Name */}
@@ -1028,8 +1031,10 @@ function InlineIncumbencyRow({
 
   return (
     <tr className="hover:bg-muted/30 transition-colors group">
-      <td className="py-2.5 px-3.5 font-mono font-bold text-primary">
-        {item.code}
+      <td className="py-2.5 px-3.5 whitespace-nowrap">
+        <span className="font-mono font-bold text-xs text-primary px-1.5 py-0.5 rounded bg-primary/5 border border-primary/15">
+          {item.code}
+        </span>
       </td>
       <td className="py-2.5 px-3.5 font-medium text-foreground whitespace-nowrap">
         {item.name}
