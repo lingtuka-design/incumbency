@@ -1,8 +1,8 @@
 INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUES ('HBA', 'House Building Advance', '', 1);
 INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUES ('CAR', 'Motor Car Advance', '', 2);
 INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUES ('COM', 'Computer Advance', '', 3);
-INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUES ('SA', 'Scooter / Special Advance', '', 4);
-INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUES ('SCL', 'Special Cycle / Marriage / Other Advance', '', 5);
+INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUES ('SA', 'Scooter Advance', '', 4);
+INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUES ('SCL', 'Special Car Loan', '', 5);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('A&C', 'Art & Culture Department', 'Government Department', 1);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('AGRI', 'Agriculture Department', 'Government Department', 2);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('AH&VETY', 'Animal Husbandry & Veterinary Department', 'Government Department', 3);

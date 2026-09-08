@@ -49,8 +49,8 @@ export const ADVANCE_TYPES = [
   { code: 'HBA', name: 'House Building Advance', sortOrder: 1 },
   { code: 'CAR', name: 'Motor Car Advance', sortOrder: 2 },
   { code: 'COM', name: 'Computer Advance', sortOrder: 3 },
-  { code: 'SA', name: 'Scooter / Special Advance', sortOrder: 4 },
-  { code: 'SCL', name: 'Special Cycle / Marriage / Other Advance', sortOrder: 5 }
+  { code: 'SA', name: 'Scooter Advance', sortOrder: 4 },
+  { code: 'SCL', name: 'Special Car Loan', sortOrder: 5 }
 ];
 
 export function detectAdvanceType(filename) {
