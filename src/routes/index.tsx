@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { useState, useMemo, useTransition, useEffect } from "react"
+import { useState, useMemo, useEffect } from "react"
 import {
   Search,
   Plus,
@@ -96,14 +96,10 @@ function DashboardPage() {
 
   const [searchQuery, setSearchQuery] = useState(searchParams.q || "")
   const [deptSearch, setDeptSearch] = useState("")
-  const [navDept, setNavDept] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
 
-  useEffect(() => {
-    if (!isPending) {
-      setNavDept(null)
-    }
-  }, [isPending])
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const pageSize = 50
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -129,12 +125,16 @@ function DashboardPage() {
   const currentType = searchParams.type || "ALL"
   const currentStatus = searchParams.status || "ALL"
 
+  // Reset pagination whenever department, type, or search changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [currentDept, currentType, currentStatus, searchParams.q])
+
   // Selected Department Info
   const activeDeptInfo = useMemo(() => {
-    const activeCode = navDept || currentDept
-    if (activeCode === "ALL") return null
-    return departments.find((d) => d.code === activeCode) || null
-  }, [departments, currentDept, navDept])
+    if (currentDept === "ALL") return null
+    return departments.find((d) => d.code === currentDept) || null
+  }, [departments, currentDept])
 
   // Filter departments for sidebar search
   const filteredDepartments = useMemo(() => {
@@ -145,65 +145,63 @@ function DashboardPage() {
     )
   }, [departments, deptSearch])
 
-  // Quick department switch with instant visual feedback
+  // Paginated records for silky smooth rendering
+  const totalPages = Math.max(1, Math.ceil(incumbencies.length / pageSize))
+  const paginatedIncumbencies = useMemo(() => {
+    const start = (currentPage - 1) * pageSize
+    return incumbencies.slice(start, start + pageSize)
+  }, [incumbencies, currentPage, pageSize])
+
+  // Direct department switch (0ms delay, no flashing)
   const handleSelectDept = (code: string) => {
-    setNavDept(code)
-    startTransition(() => {
-      navigate({
-        to: "/",
-        search: {
-          dept: code,
-          type: currentType,
-          q: searchQuery || undefined,
-          status: currentStatus,
-        },
-      })
+    navigate({
+      to: "/",
+      search: {
+        dept: code,
+        type: currentType,
+        q: searchQuery || undefined,
+        status: currentStatus,
+      },
     })
   }
 
   // Type tab switch
   const handleSelectType = (code: string) => {
-    startTransition(() => {
-      navigate({
-        to: "/",
-        search: {
-          dept: currentDept,
-          type: code,
-          q: searchQuery || undefined,
-          status: currentStatus,
-        },
-      })
+    navigate({
+      to: "/",
+      search: {
+        dept: currentDept,
+        type: code,
+        q: searchQuery || undefined,
+        status: currentStatus,
+      },
     })
   }
 
   // Status toggle
   const handleSelectStatus = (st: string) => {
-    startTransition(() => {
-      navigate({
-        to: "/",
-        search: {
-          dept: currentDept,
-          type: currentType,
-          q: searchQuery || undefined,
-          status: st,
-        },
-      })
+    navigate({
+      to: "/",
+      search: {
+        dept: currentDept,
+        type: currentType,
+        q: searchQuery || undefined,
+        status: st,
+      },
     })
   }
 
   // Search submit
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    startTransition(() => {
-      navigate({
-        to: "/",
-        search: {
-          dept: currentDept,
-          type: currentType,
-          q: searchQuery.trim() || undefined,
-          status: currentStatus,
-        },
-      })
+    navigate({
+      to: "/",
+      search: {
+        dept: currentDept,
+        type: currentType,
+        q: searchQuery.trim() || undefined,
+        status: currentStatus,
+      },
     })
   }
 
@@ -401,7 +399,7 @@ function DashboardPage() {
           <button
             onClick={() => handleSelectDept("ALL")}
             className={`w-full text-left px-3 py-2.5 rounded-md text-sm font-medium flex items-center justify-between transition-colors ${
-              (navDept ? navDept === "ALL" : currentDept === "ALL")
+              currentDept === "ALL"
                 ? "bg-primary text-primary-foreground shadow-xs"
                 : "text-sidebar-foreground hover:bg-sidebar-accent"
             }`}
@@ -409,34 +407,29 @@ function DashboardPage() {
             <span className="flex items-center gap-2 truncate">
               <span className="font-semibold">ALL DEPARTMENTS</span>
             </span>
-            <div className="flex items-center gap-1.5 shrink-0">
+            <div className="flex items-center gap-1 shrink-0">
               <span
                 className={`text-xs px-2 py-0.5 rounded-full font-mono font-semibold ${
-                  (navDept ? navDept === "ALL" : currentDept === "ALL")
+                  currentDept === "ALL"
                     ? "bg-primary-foreground/20 text-primary-foreground"
                     : "bg-muted text-muted-foreground"
                 }`}
               >
                 {stats.totalIncumbencies}
               </span>
-              {isPending && navDept === "ALL" ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-primary-foreground" />
-              ) : (
-                <ChevronRight
-                  className={`w-3.5 h-3.5 ${
-                    (navDept ? navDept === "ALL" : currentDept === "ALL")
-                      ? "text-primary-foreground"
-                      : "text-muted-foreground/40"
-                  }`}
-                />
-              )}
+              <ChevronRight
+                className={`w-3.5 h-3.5 ${
+                  currentDept === "ALL"
+                    ? "text-primary-foreground"
+                    : "text-muted-foreground/40"
+                }`}
+              />
             </div>
           </button>
 
           {/* Department Items */}
           {filteredDepartments.map((dept) => {
-            const isSelected = navDept ? navDept === dept.code : currentDept === dept.code
-            const isNavigatingThis = isPending && navDept === dept.code
+            const isSelected = currentDept === dept.code
             return (
               <button
                 key={dept.code}
@@ -476,15 +469,11 @@ function DashboardPage() {
                   ) : (
                     <span className="text-xs text-muted-foreground/60">0</span>
                   )}
-                  {isNavigatingThis ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  ) : (
-                    <ChevronRight
-                      className={`w-3.5 h-3.5 ${
-                        isSelected ? "text-primary-foreground" : "text-muted-foreground/40"
-                      }`}
-                    />
-                  )}
+                  <ChevronRight
+                    className={`w-3.5 h-3.5 ${
+                      isSelected ? "text-primary-foreground" : "text-muted-foreground/40"
+                    }`}
+                  />
                 </div>
               </button>
             )
@@ -501,13 +490,7 @@ function DashboardPage() {
       {/* ──────────────────────────────────────────────────────────
           MAIN CONTENT AREA
       ────────────────────────────────────────────────────────── */}
-      <section className="flex-1 flex flex-col overflow-y-auto md:h-[calc(100vh-3.5rem)] relative">
-        {/* Subtle loading indicator line during navigation */}
-        {isPending && (
-          <div className="absolute top-0 left-0 right-0 z-30 h-1 bg-primary/20 overflow-hidden">
-            <div className="h-full bg-primary animate-pulse w-full" />
-          </div>
-        )}
+      <section className="flex-1 flex flex-col overflow-y-auto md:h-[calc(100vh-3.5rem)]">
         {/* Department Banner & Overview */}
         <div className="p-4 lg:p-6 border-b border-border bg-card space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -629,15 +612,13 @@ function DashboardPage() {
                 type="button"
                 onClick={() => {
                   setSearchQuery("")
-                  startTransition(() => {
-                    navigate({
-                      to: "/",
-                      search: {
-                        dept: currentDept,
-                        type: currentType,
-                        status: currentStatus,
-                      },
-                    })
+                  navigate({
+                    to: "/",
+                    search: {
+                      dept: currentDept,
+                      type: currentType,
+                      status: currentStatus,
+                    },
                   })
                 }}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
@@ -685,7 +666,7 @@ function DashboardPage() {
         {/* ──────────────────────────────────────────────────────────
             DATA TABLE
         ────────────────────────────────────────────────────────── */}
-        <div className={`flex-1 p-4 lg:p-6 overflow-x-auto transition-opacity duration-150 ${isPending ? "opacity-60" : "opacity-100"}`}>
+        <div className="flex-1 p-4 lg:p-6 overflow-x-auto">
           {incumbencies.length > 0 ? (
             <div className="rounded-lg border border-border bg-card shadow-xs overflow-hidden">
               <table className="w-full text-left text-sm border-collapse">
@@ -704,7 +685,7 @@ function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {incumbencies.map((item) => (
+                  {paginatedIncumbencies.map((item) => (
                     <InlineIncumbencyRow
                       key={item.id}
                       item={item}
@@ -715,6 +696,36 @@ function DashboardPage() {
                   ))}
                 </tbody>
               </table>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="p-3 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground bg-muted/20">
+                  <div>
+                    Showing <span className="font-semibold text-foreground">{(currentPage - 1) * pageSize + 1}</span> to{" "}
+                    <span className="font-semibold text-foreground">{Math.min(currentPage * pageSize, incumbencies.length)}</span> of{" "}
+                    <span className="font-semibold text-foreground">{incumbencies.length}</span> records
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1.5 rounded-md border border-input bg-background hover:bg-muted font-medium text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Previous
+                    </button>
+                    <span className="px-2 font-medium">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1.5 rounded-md border border-input bg-background hover:bg-muted font-medium text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="rounded-lg border border-dashed border-border p-12 text-center space-y-3">
