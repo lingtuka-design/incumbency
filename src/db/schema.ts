@@ -29,6 +29,8 @@ export const incumbencies = sqliteTable(
     name: text("name").notNull(), // Employee Name
     designation: text("designation"), // e.g. "JD", "DD", "Assistant"
     fatherName: text("father_name"),
+    superannuation: text("superannuation"), // Pension date (DD-MM-YYYY)
+    rgNumber: text("rg_number"), // RG Number code
     remarks: text("remarks"),
     status: text("status", { enum: ["ACTIVE", "CLOSED"] }).default("ACTIVE"),
     createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
@@ -39,6 +41,7 @@ export const incumbencies = sqliteTable(
     index("idx_incumbencies_type").on(table.advanceType),
     index("idx_incumbencies_code").on(table.code),
     index("idx_incumbencies_name").on(table.name),
+    index("idx_incumbencies_rg_number").on(table.rgNumber),
     index("idx_incumbencies_status").on(table.status),
   ]
 )

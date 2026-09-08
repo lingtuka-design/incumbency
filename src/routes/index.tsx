@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { useState, useMemo, useTransition } from "react"
+import { useState, useMemo, useTransition, useEffect } from "react"
 import {
   Search,
   Plus,
@@ -14,6 +14,9 @@ import {
   ChevronRight,
   X,
   Loader2,
+  Calendar,
+  Check,
+  AlertCircle,
 } from "lucide-react"
 import * as XLSX from "xlsx"
 import {
@@ -24,6 +27,7 @@ import {
   createIncumbency,
   updateIncumbency,
   deleteIncumbency,
+  patchIncumbencyInline,
   type DepartmentWithStats,
   type SummaryStats,
 } from "../lib/server-actions"
@@ -43,6 +47,8 @@ export interface IncumbencyItem {
   name: string
   designation: string | null
   fatherName: string | null
+  superannuation?: string | null
+  rgNumber?: string | null
   remarks: string | null
   status: "ACTIVE" | "CLOSED" | null
   createdAt: Date | null
@@ -120,6 +126,8 @@ function DashboardPage() {
     name: "",
     designation: "",
     fatherName: "",
+    superannuation: "",
+    rgNumber: "",
     remarks: "",
     status: "ACTIVE" as "ACTIVE" | "CLOSED",
   })
@@ -214,6 +222,8 @@ function DashboardPage() {
       name: "",
       designation: "",
       fatherName: "",
+      superannuation: "",
+      rgNumber: "",
       remarks: "",
       status: "ACTIVE",
     })
@@ -231,6 +241,8 @@ function DashboardPage() {
       name: item.name,
       designation: item.designation || "",
       fatherName: item.fatherName || "",
+      superannuation: item.superannuation || "",
+      rgNumber: item.rgNumber || "",
       remarks: item.remarks || "",
       status: (item.status as "ACTIVE" | "CLOSED") || "ACTIVE",
     })
@@ -254,6 +266,8 @@ function DashboardPage() {
             name: formData.name,
             designation: formData.designation,
             fatherName: formData.fatherName,
+            superannuation: formData.superannuation,
+            rgNumber: formData.rgNumber,
             remarks: formData.remarks,
             status: formData.status,
           },
@@ -310,6 +324,8 @@ function DashboardPage() {
       "Employee Name": row.name,
       Designation: row.designation || "",
       "Father Name": row.fatherName || "",
+      Superannuation: row.superannuation || "",
+      "RG Number": row.rgNumber || "",
       Remarks: row.remarks || "",
       Status: row.status,
     }))
@@ -661,81 +677,24 @@ function DashboardPage() {
                     <th className="py-3 px-3.5">Employee Name</th>
                     <th className="py-3 px-3.5">Designation</th>
                     <th className="py-3 px-3.5">Father's Name</th>
+                    <th className="py-3 px-2.5 w-44">Superannuation (Pension)</th>
+                    <th className="py-3 px-2.5 w-36">RG Number</th>
                     <th className="py-3 px-3.5 w-24">Dept</th>
                     <th className="py-3 px-3.5 w-24">Type</th>
                     <th className="py-3 px-3.5">Remarks</th>
                     <th className="py-3 px-3.5 w-20 text-center">Status</th>
-                    <th className="py-3 px-3.5 w-20 text-right">Actions</th>
+                    <th className="py-3 px-3.5 w-24 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {incumbencies.map((item) => (
-                    <tr
+                    <InlineIncumbencyRow
                       key={item.id}
-                      className="hover:bg-muted/30 transition-colors group"
-                    >
-                      <td className="py-2.5 px-3.5 font-mono font-bold text-primary">
-                        {item.code}
-                      </td>
-                      <td className="py-2.5 px-3.5 font-medium text-foreground">
-                        {item.name}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-muted-foreground">
-                        {item.designation || "—"}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-muted-foreground">
-                        {item.fatherName || "—"}
-                      </td>
-                      <td className="py-2.5 px-3.5">
-                        <span className="font-mono text-[11px] font-semibold text-muted-foreground">
-                          {item.departmentCode}
-                        </span>
-                      </td>
-                      <td className="py-2.5 px-3.5">
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${getAdvanceBadgeColor(
-                            item.advanceType
-                          )}`}
-                        >
-                          {item.advanceType}
-                        </span>
-                      </td>
-                      <td className="py-2.5 px-3.5 text-muted-foreground max-w-xs truncate">
-                        {item.remarks || "—"}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-center">
-                        <span
-                          className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                            item.status === "ACTIVE"
-                              ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                              : "bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300"
-                          }`}
-                        >
-                          {item.status === "ACTIVE" ? (
-                            <CheckCircle2 className="w-3 h-3" />
-                          ) : (
-                            <XCircle className="w-3 h-3" />
-                          )}
-                          {item.status}
-                        </span>
-                      </td>
-                      <td className="py-2.5 px-3.5 text-right space-x-1 whitespace-nowrap">
-                        <button
-                          onClick={() => openEditModal(item)}
-                          className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                          title="Edit"
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item)}
-                          className="p-1 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
+                      item={item}
+                      getAdvanceBadgeColor={getAdvanceBadgeColor}
+                      openEditModal={openEditModal}
+                      handleDelete={handleDelete}
+                    />
                   ))}
                 </tbody>
               </table>
@@ -895,6 +854,36 @@ function DashboardPage() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Superannuation */}
+                <div>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">
+                    Superannuation (Pension Date: DD-MM-YYYY)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 31-03-2028"
+                    value={formData.superannuation}
+                    onChange={(e) => setFormData({ ...formData, superannuation: e.target.value })}
+                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                  />
+                </div>
+
+                {/* RG Number */}
+                <div>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">
+                    RG Number
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. RG-001"
+                    value={formData.rgNumber}
+                    onChange={(e) => setFormData({ ...formData, rgNumber: e.target.value })}
+                    className="w-full bg-background text-foreground text-xs p-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
+                  />
+                </div>
+              </div>
+
               {/* Status */}
               <div>
                 <label className="block text-xs font-medium text-muted-foreground mb-1">
@@ -963,5 +952,213 @@ function DashboardPage() {
         </div>
       )}
     </div>
+  )
+}
+
+interface InlineIncumbencyRowProps {
+  item: IncumbencyItem
+  getAdvanceBadgeColor: (type: string) => string
+  openEditModal: (item: IncumbencyItem) => void
+  handleDelete: (item: IncumbencyItem) => void
+}
+
+function InlineIncumbencyRow({
+  item,
+  getAdvanceBadgeColor,
+  openEditModal,
+  handleDelete,
+}: InlineIncumbencyRowProps) {
+  const [superannuation, setSuperannuation] = useState(item.superannuation || "")
+  const [rgNumber, setRgNumber] = useState(item.rgNumber || "")
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+  const [lastSaved, setLastSaved] = useState({
+    superannuation: item.superannuation || "",
+    rgNumber: item.rgNumber || "",
+  })
+
+  // Sync state if item prop changes
+  useEffect(() => {
+    setSuperannuation(item.superannuation || "")
+    setRgNumber(item.rgNumber || "")
+    setLastSaved({
+      superannuation: item.superannuation || "",
+      rgNumber: item.rgNumber || "",
+    })
+  }, [item.id, item.superannuation, item.rgNumber])
+
+  const handleSaveField = async (field: "superannuation" | "rgNumber", val: string) => {
+    const trimmed = val.trim()
+    if (trimmed === lastSaved[field]) {
+      return
+    }
+
+    setSaveStatus("saving")
+    try {
+      const res = await patchIncumbencyInline({
+        data: {
+          id: item.id,
+          [field]: trimmed || null,
+        },
+      })
+      if (res?.success) {
+        setLastSaved((prev) => ({ ...prev, [field]: trimmed }))
+        item[field] = trimmed || null
+        setSaveStatus("saved")
+        setTimeout(() => {
+          setSaveStatus((s) => (s === "saved" ? "idle" : s))
+        }, 2500)
+      } else {
+        setSaveStatus("error")
+      }
+    } catch (e) {
+      console.error("Failed to inline save to D1:", e)
+      setSaveStatus("error")
+    }
+  }
+
+  const handleDatePick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value // "YYYY-MM-DD"
+    if (val) {
+      const [y, m, d] = val.split("-")
+      const formatted = `${d}-${m}-${y}`
+      setSuperannuation(formatted)
+      handleSaveField("superannuation", formatted)
+    }
+  }
+
+  return (
+    <tr className="hover:bg-muted/30 transition-colors group">
+      <td className="py-2.5 px-3.5 font-mono font-bold text-primary">
+        {item.code}
+      </td>
+      <td className="py-2.5 px-3.5 font-medium text-foreground whitespace-nowrap">
+        {item.name}
+      </td>
+      <td className="py-2.5 px-3.5 text-muted-foreground whitespace-nowrap">
+        {item.designation || "—"}
+      </td>
+      <td className="py-2.5 px-3.5 text-muted-foreground whitespace-nowrap">
+        {item.fatherName || "—"}
+      </td>
+
+      {/* Superannuation (Pension Date: DD-MM-YYYY) */}
+      <td className="py-1.5 px-2.5 w-44">
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            placeholder="DD-MM-YYYY"
+            value={superannuation}
+            onChange={(e) => setSuperannuation(e.target.value)}
+            onBlur={() => handleSaveField("superannuation", superannuation)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.currentTarget.blur()
+              }
+            }}
+            className="w-full font-mono text-xs px-2 py-1 pr-6 rounded border border-input bg-background/80 hover:bg-background focus:bg-background focus:outline-none focus:ring-1 focus:ring-ring transition-colors placeholder:text-muted-foreground/40"
+            title="Superannuation Pension Date (DD-MM-YYYY)"
+          />
+          <label
+            className="absolute right-1 cursor-pointer text-muted-foreground hover:text-foreground p-0.5"
+            title="Choose Date"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <input
+              type="date"
+              className="sr-only"
+              onChange={handleDatePick}
+            />
+          </label>
+        </div>
+      </td>
+
+      {/* RG Number */}
+      <td className="py-1.5 px-2.5 w-36">
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            placeholder="RG Code"
+            value={rgNumber}
+            onChange={(e) => setRgNumber(e.target.value)}
+            onBlur={() => handleSaveField("rgNumber", rgNumber)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.currentTarget.blur()
+              }
+            }}
+            className="w-full font-mono text-xs px-2 py-1 rounded border border-input bg-background/80 hover:bg-background focus:bg-background focus:outline-none focus:ring-1 focus:ring-ring transition-colors placeholder:text-muted-foreground/40"
+            title="RG Number code"
+          />
+        </div>
+      </td>
+
+      <td className="py-2.5 px-3.5">
+        <span className="font-mono text-[11px] font-semibold text-muted-foreground">
+          {item.departmentCode}
+        </span>
+      </td>
+      <td className="py-2.5 px-3.5">
+        <span
+          className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${getAdvanceBadgeColor(
+            item.advanceType
+          )}`}
+        >
+          {item.advanceType}
+        </span>
+      </td>
+      <td className="py-2.5 px-3.5 text-muted-foreground max-w-xs truncate">
+        {item.remarks || "—"}
+      </td>
+      <td className="py-2.5 px-3.5 text-center">
+        <span
+          className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+            item.status === "ACTIVE"
+              ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
+              : "bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300"
+          }`}
+        >
+          {item.status === "ACTIVE" ? (
+            <CheckCircle2 className="w-3 h-3" />
+          ) : (
+            <XCircle className="w-3 h-3" />
+          )}
+          {item.status}
+        </span>
+      </td>
+      <td className="py-2.5 px-3.5 text-right whitespace-nowrap">
+        <div className="inline-flex items-center gap-1">
+          {saveStatus === "saving" && (
+            <span title="Saving to D1..." className="inline-flex items-center text-blue-500 mr-1">
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            </span>
+          )}
+          {saveStatus === "saved" && (
+            <span title="Saved to D1" className="inline-flex items-center text-emerald-600 dark:text-emerald-400 mr-1">
+              <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+            </span>
+          )}
+          {saveStatus === "error" && (
+            <span title="Save error! Try again" className="inline-flex items-center text-destructive mr-1">
+              <AlertCircle className="w-3.5 h-3.5" />
+            </span>
+          )}
+
+          <button
+            onClick={() => openEditModal(item)}
+            className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            title="Edit Full Record"
+          >
+            <Edit2 className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={() => handleDelete(item)}
+            className="p-1 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+            title="Delete"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </td>
+    </tr>
   )
 }

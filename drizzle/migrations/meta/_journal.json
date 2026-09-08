@@ -8,6 +8,13 @@
       "when": 1788863969514,
       "tag": "0000_sticky_warbird",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788879052335,
+      "tag": "0001_mysterious_machine_man",
+      "breakpoints": true
     }
   ]
 }

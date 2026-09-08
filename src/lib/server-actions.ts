@@ -123,6 +123,8 @@ export const getIncumbencies = createServerFn({ method: "GET" })
             like(incumbencies.name, query),
             like(incumbencies.designation, query),
             like(incumbencies.fatherName, query),
+            like(incumbencies.rgNumber, query),
+            like(incumbencies.superannuation, query),
             like(incumbencies.remarks, query)
           )
         )
@@ -141,6 +143,8 @@ export const getIncumbencies = createServerFn({ method: "GET" })
           name: incumbencies.name,
           designation: incumbencies.designation,
           fatherName: incumbencies.fatherName,
+          superannuation: incumbencies.superannuation,
+          rgNumber: incumbencies.rgNumber,
           remarks: incumbencies.remarks,
           status: incumbencies.status,
           createdAt: incumbencies.createdAt,
@@ -214,6 +218,8 @@ export interface CreateIncumbencyInput {
   name: string
   designation?: string
   fatherName?: string
+  superannuation?: string | null
+  rgNumber?: string | null
   remarks?: string
   status?: "ACTIVE" | "CLOSED"
 }
@@ -239,6 +245,8 @@ export const createIncumbency = createServerFn({ method: "POST" })
       name: data.name.trim(),
       designation: data.designation?.trim() || null,
       fatherName: data.fatherName?.trim() || null,
+      superannuation: data.superannuation?.trim() || null,
+      rgNumber: data.rgNumber?.trim() || null,
       remarks: data.remarks?.trim() || null,
       status: (data.status || "ACTIVE") as "ACTIVE" | "CLOSED",
       createdAt: now,
@@ -272,6 +280,8 @@ export const updateIncumbency = createServerFn({ method: "POST" })
         name: data.name.trim(),
         designation: data.designation?.trim() || null,
         fatherName: data.fatherName?.trim() || null,
+        superannuation: data.superannuation?.trim() || null,
+        rgNumber: data.rgNumber?.trim() || null,
         remarks: data.remarks?.trim() || null,
         status: (data.status || "ACTIVE") as "ACTIVE" | "CLOSED",
         updatedAt: now,
@@ -290,4 +300,40 @@ export const deleteIncumbency = createServerFn({ method: "POST" })
   .handler(async ({ data: id }) => {
     await db.delete(incumbencies).where(eq(incumbencies.id, id))
     return { success: true }
+  })
+
+export interface PatchIncumbencyInlineInput {
+  id: string
+  superannuation?: string | null
+  rgNumber?: string | null
+}
+
+// 8. Fast patch for inline table editing (Superannuation & RG Number)
+export const patchIncumbencyInline = createServerFn({ method: "POST" })
+  .validator((input: PatchIncumbencyInlineInput) => {
+    if (!input?.id) throw new Error("Record ID is required")
+    return input
+  })
+  .handler(async ({ data }) => {
+    const updateValues: Record<string, any> = {
+      updatedAt: new Date(),
+    }
+    if (data.superannuation !== undefined) {
+      updateValues.superannuation = data.superannuation?.trim() || null
+    }
+    if (data.rgNumber !== undefined) {
+      updateValues.rgNumber = data.rgNumber?.trim() || null
+    }
+
+    await db
+      .update(incumbencies)
+      .set(updateValues)
+      .where(eq(incumbencies.id, data.id))
+
+    return {
+      success: true,
+      id: data.id,
+      superannuation: updateValues.superannuation ?? undefined,
+      rgNumber: updateValues.rgNumber ?? undefined,
+    }
   })
