@@ -95,6 +95,7 @@ function DashboardPage() {
   const navigate = useNavigate()
 
   const [searchQuery, setSearchQuery] = useState(searchParams.q || "")
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
   const [deptSearch, setDeptSearch] = useState("")
 
   // Pagination
@@ -125,10 +126,12 @@ function DashboardPage() {
   const currentType = searchParams.type || "ALL"
   const currentStatus = searchParams.status || "ALL"
 
-  // Keep searchQuery input in sync if URL search param changes externally
+  // Only sync searchQuery from URL when user is NOT actively typing in the search box
   useEffect(() => {
-    setSearchQuery(searchParams.q || "")
-  }, [searchParams.q])
+    if (!isSearchFocused) {
+      setSearchQuery(searchParams.q || "")
+    }
+  }, [searchParams.q, isSearchFocused])
 
   // Debounced real-time search: auto-load results as user types without pressing Enter
   useEffect(() => {
@@ -145,8 +148,9 @@ function DashboardPage() {
           q: newQ || undefined,
           status: currentStatus,
         },
+        resetScroll: false,
       })
-    }, 250)
+    }, 400)
 
     return () => clearTimeout(timer)
   }, [searchQuery, currentDept, currentType, currentStatus, searchParams.q, navigate])
@@ -188,6 +192,7 @@ function DashboardPage() {
         q: searchQuery || undefined,
         status: currentStatus,
       },
+      resetScroll: false,
     })
   }
 
@@ -201,6 +206,7 @@ function DashboardPage() {
         q: searchQuery || undefined,
         status: currentStatus,
       },
+      resetScroll: false,
     })
   }
 
@@ -214,6 +220,7 @@ function DashboardPage() {
         q: searchQuery || undefined,
         status: st,
       },
+      resetScroll: false,
     })
   }
 
@@ -228,6 +235,7 @@ function DashboardPage() {
         q: searchQuery.trim() || undefined,
         status: currentStatus,
       },
+      resetScroll: false,
     })
   }
 
@@ -630,6 +638,8 @@ function DashboardPage() {
               type="text"
               placeholder="Search by name, code no, designation..."
               value={searchQuery}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-background text-foreground text-sm pl-9 pr-8 py-2 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring"
             />
@@ -645,6 +655,7 @@ function DashboardPage() {
                       type: currentType,
                       status: currentStatus,
                     },
+                    resetScroll: false,
                   })
                 }}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
@@ -692,7 +703,7 @@ function DashboardPage() {
         {/* ──────────────────────────────────────────────────────────
             DATA TABLE
         ────────────────────────────────────────────────────────── */}
-        <div className="flex-1 p-4 lg:p-6 overflow-x-auto">
+        <div className="flex-1 p-4 lg:p-6 overflow-x-auto min-h-[450px]">
           {incumbencies.length > 0 ? (
             <div className="rounded-lg border border-border bg-card shadow-xs overflow-hidden">
               <table className="w-full text-left text-sm border-collapse">
