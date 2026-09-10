@@ -5,7 +5,7 @@ INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUE
 INSERT OR REPLACE INTO advance_types (code, name, description, sort_order) VALUES ('SCL', 'Special Car Loan', '', 5);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('A&C', 'Art & Culture Department', 'Government Department', 1);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('AGRI', 'Agriculture Department', 'Government Department', 2);
-INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('AH&VETY', 'Animal Husbandry & Veterinary Department', 'Government Department', 3);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('VETY', 'Animal Husbandry & Veterinary Department', 'Government Department', 3);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('ATI', 'Administrative Training Institute', 'Government Department', 4);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('CM', 'Chief Minister''s Office / Secretariat', 'Government Department', 5);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('DAT', 'Directorate of Accounts & Treasuries', 'Government Department', 6);

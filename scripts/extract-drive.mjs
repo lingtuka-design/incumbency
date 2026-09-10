@@ -5,7 +5,7 @@ import xlsx from 'xlsx';
 export const DEPARTMENTS = [
   { code: 'A&C', name: 'Art & Culture Department', folderId: '1UwAs85oeqCO3IoIdIjBzX8MDwaxK9yRl' },
   { code: 'AGRI', name: 'Agriculture Department', folderId: '1KEVNxgdAuXBvDsiv9gL3Ou8adPk9dyBh' },
-  { code: 'AH&VETY', name: 'Animal Husbandry & Veterinary Department', folderId: '1emYwEyo63HZGk5GZRiIXgn_Vj0TQY0ix' },
+  { code: 'VETY', name: 'Animal Husbandry & Veterinary Department', folderId: '1emYwEyo63HZGk5GZRiIXgn_Vj0TQY0ix' },
   { code: 'ATI', name: 'Administrative Training Institute', folderId: '1WAo1CKBp6lQa9CmnX2RCI5NmR2Kwsbkl' },
   { code: 'CM', name: "Chief Minister's Office / Secretariat", folderId: '1X42xZaAMXRNMpiHCTC9aIyuLIS7c9le9' },
   { code: 'DAT', name: 'Directorate of Accounts & Treasuries', folderId: '1bbS90ntBnzqZssO9mY6TBKC2vsah4zD4' },
