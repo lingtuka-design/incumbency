@@ -13,9 +13,9 @@ INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('D
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('ECS', 'Economics & Statistics Department', 'Government Department', 8);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('EDN', 'School Education Department', 'Government Department', 9);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('ELCN', 'Election Department', 'Government Department', 10);
-INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('EXCISE', 'Excise & Narcotics Department', 'Government Department', 11);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('EXE', 'Excise & Narcotics Department', 'Government Department', 11);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('FISH', 'Fisheries Department', 'Government Department', 12);
-INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('FOREST', 'Environment, Forests & Climate Change', 'Government Department', 13);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('FOR', 'Environment, Forests & Climate Change', 'Government Department', 13);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('GHC', 'Gauhati High Court (Aizawl Bench)', 'Government Department', 14);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('HOR', 'Horticulture Department', 'Government Department', 15);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('HTE', 'Higher & Technical Education Department', 'Government Department', 16);
