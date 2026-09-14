@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useRef } from "react"
 import {
   Search,
   Plus,
@@ -941,6 +941,14 @@ function DashboardPage() {
                         const normalized = normalizeSuperannuationOnBlur(formData.superannuation)
                         setFormData({ ...formData, superannuation: normalized })
                       }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault()
+                          const normalized = normalizeSuperannuationOnBlur(formData.superannuation)
+                          setFormData({ ...formData, superannuation: normalized })
+                          document.getElementById("modal-rg-number")?.focus()
+                        }
+                      }}
                       className="w-full bg-background text-foreground text-sm px-3 py-2 pr-9 rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-ring font-mono"
                     />
                     <label
@@ -950,6 +958,7 @@ function DashboardPage() {
                       <Calendar className="w-4 h-4" />
                       <input
                         type="date"
+                        tabIndex={-1}
                         className="sr-only"
                         onChange={(e) => {
                           const val = e.target.value
@@ -969,6 +978,7 @@ function DashboardPage() {
                     RG Number
                   </label>
                   <input
+                    id="modal-rg-number"
                     type="text"
                     placeholder="e.g. RG-001"
                     value={formData.rgNumber}
@@ -1056,6 +1066,9 @@ function InlineIncumbencyRow({
     rgNumber: item.rgNumber || "",
   })
 
+  const superannuationInputRef = useRef<HTMLInputElement>(null)
+  const rgInputRef = useRef<HTMLInputElement>(null)
+
   // Sync state if item prop changes
   useEffect(() => {
     setSuperannuation(item.superannuation || "")
@@ -1127,6 +1140,8 @@ function InlineIncumbencyRow({
       <td className="py-1.5 px-2.5 w-48">
         <div className="relative flex items-center">
           <input
+            ref={superannuationInputRef}
+            data-field="superannuation"
             type="text"
             placeholder="DD-MM-YYYY"
             value={superannuation}
@@ -1140,8 +1155,24 @@ function InlineIncumbencyRow({
               handleSaveField("superannuation", normalized)
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.currentTarget.blur()
+              if (e.key === "Tab" && !e.shiftKey) {
+                e.preventDefault()
+                const normalized = normalizeSuperannuationOnBlur(superannuation)
+                if (normalized !== superannuation) {
+                  setSuperannuation(normalized)
+                }
+                handleSaveField("superannuation", normalized)
+                rgInputRef.current?.focus()
+                rgInputRef.current?.select()
+              } else if (e.key === "Enter") {
+                e.preventDefault()
+                const normalized = normalizeSuperannuationOnBlur(superannuation)
+                if (normalized !== superannuation) {
+                  setSuperannuation(normalized)
+                }
+                handleSaveField("superannuation", normalized)
+                rgInputRef.current?.focus()
+                rgInputRef.current?.select()
               }
             }}
             className="w-full font-mono text-sm px-2.5 py-1.5 pr-7 rounded border border-input bg-background/80 hover:bg-background focus:bg-background focus:outline-none focus:ring-1 focus:ring-ring transition-colors placeholder:text-muted-foreground/40"
@@ -1154,6 +1185,7 @@ function InlineIncumbencyRow({
             <Calendar className="w-4 h-4" />
             <input
               type="date"
+              tabIndex={-1}
               className="sr-only"
               onChange={handleDatePick}
             />
@@ -1165,14 +1197,32 @@ function InlineIncumbencyRow({
       <td className="py-1.5 px-2.5 w-36">
         <div className="relative flex items-center">
           <input
+            ref={rgInputRef}
+            data-field="rgNumber"
             type="text"
             placeholder="RG Code"
             value={rgNumber}
             onChange={(e) => setRgNumber(e.target.value)}
             onBlur={() => handleSaveField("rgNumber", rgNumber)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.currentTarget.blur()
+              if (e.key === "Tab" && e.shiftKey) {
+                e.preventDefault()
+                handleSaveField("rgNumber", rgNumber)
+                superannuationInputRef.current?.focus()
+                superannuationInputRef.current?.select()
+              } else if ((e.key === "Tab" && !e.shiftKey) || e.key === "Enter") {
+                handleSaveField("rgNumber", rgNumber)
+                const nextSuperInput = e.currentTarget
+                  .closest("tr")
+                  ?.nextElementSibling
+                  ?.querySelector("input[data-field='superannuation']") as HTMLInputElement | null
+                if (nextSuperInput) {
+                  e.preventDefault()
+                  nextSuperInput.focus()
+                  nextSuperInput.select()
+                } else if (e.key === "Enter") {
+                  e.currentTarget.blur()
+                }
               }
             }}
             className="w-full font-mono text-sm px-2.5 py-1.5 rounded border border-input bg-background/80 hover:bg-background focus:bg-background focus:outline-none focus:ring-1 focus:ring-ring transition-colors placeholder:text-muted-foreground/40"
@@ -1230,6 +1280,7 @@ function InlineIncumbencyRow({
           )}
 
           <button
+            tabIndex={-1}
             onClick={() => openEditModal(item)}
             className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             title="Edit Full Record"
@@ -1237,6 +1288,7 @@ function InlineIncumbencyRow({
             <Edit2 className="w-4 h-4" />
           </button>
           <button
+            tabIndex={-1}
             onClick={() => handleDelete(item)}
             className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
             title="Delete"
