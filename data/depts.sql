@@ -43,3 +43,11 @@ INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('T
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('Tourism', 'Tourism Department', 'Government Department', 38);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('UD&PA', 'Urban Development & Poverty Alleviation', 'Government Department', 39);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('ZSB', 'Zila Sainik Board', 'Government Department', 40);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('COOP', 'Cooperation Department', 'Government Department', 41);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('FCA', 'Food, Civil Supplies & Consumer Affairs', 'Government Department', 42);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('HME', 'Home Department', 'Government Department', 43);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('IND', 'Commerce & Industries Department', 'Government Department', 44);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('LRS', 'Land Revenue & Settlement Department', 'Government Department', 45);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('PHE', 'Public Health Engineering Department', 'Government Department', 46);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('SERI', 'Sericulture Department', 'Government Department', 47);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('TRP', 'Transport Department', 'Government Department', 48);

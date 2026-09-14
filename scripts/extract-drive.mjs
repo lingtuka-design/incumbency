@@ -42,7 +42,15 @@ export const DEPARTMENTS = [
   { code: 'TAX', name: 'Taxation Department', folderId: '1VZlkfoyBgkol-64GCHT9LYPBHeWchMAm' },
   { code: 'Tourism', name: 'Tourism Department', folderId: '1CbMb0uy7tUtNRYrjvxnE8EwPt8p0MxoM' },
   { code: 'UD&PA', name: 'Urban Development & Poverty Alleviation', folderId: '1PMe4eKYBf9AttUr6sDGARHs9gPiO3G3f' },
-  { code: 'ZSB', name: 'Zila Sainik Board', folderId: '1utWdbh0m8ks0Zr8gWbYvmOLubU8fN1gw' }
+  { code: 'ZSB', name: 'Zila Sainik Board', folderId: '1utWdbh0m8ks0Zr8gWbYvmOLubU8fN1gw' },
+  { code: 'COOP', name: 'Cooperation Department', folderId: '' },
+  { code: 'FCA', name: 'Food, Civil Supplies & Consumer Affairs', folderId: '' },
+  { code: 'HME', name: 'Home Department', folderId: '' },
+  { code: 'IND', name: 'Commerce & Industries Department', folderId: '' },
+  { code: 'LRS', name: 'Land Revenue & Settlement Department', folderId: '' },
+  { code: 'PHE', name: 'Public Health Engineering Department', folderId: '' },
+  { code: 'SERI', name: 'Sericulture Department', folderId: '' },
+  { code: 'TRP', name: 'Transport Department', folderId: '' }
 ];
 
 export const ADVANCE_TYPES = [
