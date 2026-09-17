@@ -26,7 +26,7 @@ INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('I
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('L&J', 'Law & Judicial Department', 'Government Department', 21);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('LAD', 'Local Administration Department', 'Government Department', 22);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('LAE', 'Labour, Employment, Skill Dev & Entrepreneurship', 'Government Department', 23);
-INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('LGM', 'Land Resources, Soil & Water Conservation', 'Government Department', 24);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('LGM', 'Legal Metrology Department', 'Government Department', 24);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('MIC', 'Mizoram Information Commission', 'Government Department', 25);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('MLA', 'Mizoram Legislative Assembly Secretariat', 'Government Department', 26);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('MPSC', 'Mizoram Public Service Commission', 'Government Department', 27);
@@ -51,3 +51,8 @@ INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('L
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('PHE', 'Public Health Engineering Department', 'Government Department', 46);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('SERI', 'Sericulture Department', 'Government Department', 47);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('TRP', 'Transport Department', 'Government Department', 48);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('DC', 'Deputy Commissioner Office', 'Government Department', 49);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('GAD', 'General Administration Department', 'Government Department', 50);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('PWD', 'Public Works Department', 'Government Department', 51);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('SAD', 'Secretariat Administration Department', 'Government Department', 52);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('SWC', 'Land Resources, Soil & Water Conservation', 'Government Department', 53);

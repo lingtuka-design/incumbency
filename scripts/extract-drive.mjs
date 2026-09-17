@@ -26,7 +26,7 @@ export const DEPARTMENTS = [
   { code: 'L&J', name: 'Law & Judicial Department', folderId: '1bi68sxo9OMopmeWMAkjXLipg9h5GwidW' },
   { code: 'LAD', name: 'Local Administration Department', folderId: '1dSqhQRJtvrhUw5bubqPJnF8eQ8F8Vdx-' },
   { code: 'LAE', name: 'Labour, Employment, Skill Dev & Entrepreneurship', folderId: '1jSfEybq4CM_ZlDsmpMvIOV7wHMHI9aeT' },
-  { code: 'LGM', name: 'Land Resources, Soil & Water Conservation', folderId: '1kav9iaiIWZ58izlcV-uW68C_AmuAaLwH' },
+  { code: 'LGM', name: 'Legal Metrology Department', folderId: '1kav9iaiIWZ58izlcV-uW68C_AmuAaLwH' },
   { code: 'MIC', name: 'Mizoram Information Commission', folderId: '1JY6Lk7v8LsXRf0TZge4LxQFLZob_OkCe' },
   { code: 'MLA', name: 'Mizoram Legislative Assembly Secretariat', folderId: '1JdupaGxMoa2ZP1DaNaOCVRhvjHwsJph4' },
   { code: 'MPSC', name: 'Mizoram Public Service Commission', folderId: '1rQ4TseebWumKq7f8ggsl0jPmKxaYGXVu' },
@@ -50,7 +50,12 @@ export const DEPARTMENTS = [
   { code: 'LRS', name: 'Land Revenue & Settlement Department', folderId: '' },
   { code: 'PHE', name: 'Public Health Engineering Department', folderId: '' },
   { code: 'SERI', name: 'Sericulture Department', folderId: '' },
-  { code: 'TRP', name: 'Transport Department', folderId: '' }
+  { code: 'TRP', name: 'Transport Department', folderId: '' },
+  { code: 'DC', name: 'Deputy Commissioner Office', folderId: '' },
+  { code: 'GAD', name: 'General Administration Department', folderId: '' },
+  { code: 'PWD', name: 'Public Works Department', folderId: '' },
+  { code: 'SAD', name: 'Secretariat Administration Department', folderId: '' },
+  { code: 'SWC', name: 'Land Resources, Soil & Water Conservation', folderId: '' }
 ];
 
 export const ADVANCE_TYPES = [
