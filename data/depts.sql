@@ -56,3 +56,4 @@ INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('G
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('PWD', 'Public Works Department', 'Government Department', 51);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('SAD', 'Secretariat Administration Department', 'Government Department', 52);
 INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('SWC', 'Land Resources, Soil & Water Conservation', 'Government Department', 53);
+INSERT OR REPLACE INTO departments (code, name, category, sort_order) VALUES ('HSD', 'Health & Family Welfare Department', 'Government Department', 54);

@@ -55,7 +55,8 @@ export const DEPARTMENTS = [
   { code: 'GAD', name: 'General Administration Department', folderId: '' },
   { code: 'PWD', name: 'Public Works Department', folderId: '' },
   { code: 'SAD', name: 'Secretariat Administration Department', folderId: '' },
-  { code: 'SWC', name: 'Land Resources, Soil & Water Conservation', folderId: '' }
+  { code: 'SWC', name: 'Land Resources, Soil & Water Conservation', folderId: '' },
+  { code: 'HSD', name: 'Health & Family Welfare Department', folderId: '1U9NVGF7bKrC4Bvi2v8fjGb8_HHfJ1_qN' }
 ];
 
 export const ADVANCE_TYPES = [
