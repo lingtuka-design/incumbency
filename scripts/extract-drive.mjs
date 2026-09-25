@@ -58,7 +58,8 @@ export const DEPARTMENTS = [
   { code: 'SWC', name: 'Land Resources, Soil & Water Conservation', folderId: '' },
   { code: 'HSD', name: 'Health & Family Welfare Department', folderId: '1U9NVGF7bKrC4Bvi2v8fjGb8_HHfJ1_qN' },
   { code: 'G&M', name: 'Geology & Mineral Resources Department', folderId: '13I7QzeD7hmzScJyiy70g5MS1ppu83xsM' },
-  { code: 'SIPMIU', name: 'State Investment Program Management & Implementation Unit', folderId: '1DJHzcrxiRCcC35Tbq9tl-2bVvlxFL7xf' }
+  { code: 'SIPMIU', name: 'State Investment Program Management & Implementation Unit', folderId: '1DJHzcrxiRCcC35Tbq9tl-2bVvlxFL7xf' },
+  { code: 'POL', name: 'Police Department', folderId: '1E8_5ln5QXn9V56vRye_gZ1ydwxVRJBxI' }
 ];
 
 export const ADVANCE_TYPES = [
